@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_24_070707) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_24_110423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_070707) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "age"
+    t.string "gender"
+    t.string "location"
+    t.string "number"
+    t.string "instagram"
+    t.string "facebook"
+    t.string "twitter"
+    t.string "dob"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -64,10 +81,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_070707) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "role", default: "user"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "profiles", "users"
 end
